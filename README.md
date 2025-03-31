@@ -112,8 +112,6 @@ Endpoint: POST /api/problems/generate
 
 요청 데이터:
 
-json
-
 {
 
   "topic": "algebra",
@@ -123,8 +121,6 @@ json
 }
 
 응답 데이터:
-
-json
 
 {
 
@@ -144,8 +140,6 @@ Endpoint: POST /api/feedback
 
 요청 데이터:
 
-json
-
 {
 
   "user_id": 1,
@@ -157,8 +151,6 @@ json
 }
 
 응답 데이터:
-
-json
 
 {
 
@@ -174,8 +166,6 @@ Endpoint: GET /api/recommendations/{user_id}
 
 응답 데이터:
 
-json
-
 {
 
   "recommended_difficulty": "medium",
@@ -190,8 +180,6 @@ Endpoint: GET /api/mood-adjustment/{user_id}
 
 응답 데이터:
 
-json
-
 {
 
   "mood": "frustrated",
@@ -204,47 +192,74 @@ json
 3. 
 problems 테이블 (문제 데이터 저장)
 
-sql
-
 CREATE TABLE problems (
+
     problem_id INT AUTO_INCREMENT PRIMARY KEY,
+    
     question TEXT NOT NULL,
+    
     answer VARCHAR(255) NOT NULL,
+    
     difficulty ENUM('easy', 'medium', 'hard') NOT NULL,
+    
     source ENUM('AI', 'public', 'manual') NOT NULL,
+    
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    
 );
+
 solutions 테이블 (풀이 데이터 저장)
-sql
+
 CREATE TABLE solutions (
+
     solution_id INT AUTO_INCREMENT PRIMARY KEY,
+    
     user_id INT NOT NULL,
+    
     problem_id INT NOT NULL,
+    
     user_answer VARCHAR(255) NOT NULL,
+    
     is_correct BOOLEAN NOT NULL,
+    
     time_taken INT NOT NULL,
+    
     solved_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
     FOREIGN KEY (user_id) REFERENCES users(user_id),
+    
     FOREIGN KEY (problem_id) REFERENCES problems(problem_id)
+    
 );
+
  user_performance 테이블 (정답률 & 풀이 시간 추적)
-sql
 
 CREATE TABLE user_performance (
+
     user_id INT PRIMARY KEY,
+    
     correct_rate FLOAT NOT NULL,
+    
     avg_time_taken FLOAT NOT NULL,
+    
     last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
     FOREIGN KEY (user_id) REFERENCES users(user_id)
+    
 );
+
 user_mood 테이블 (감정 상태 저장)
-sql
 
 CREATE TABLE user_mood (
+
     user_id INT PRIMARY KEY,
+    
     mood ENUM('neutral', 'frustrated', 'confident') NOT NULL,
+    
     last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
     FOREIGN KEY (user_id) REFERENCES users(user_id)
+    
 );
 
 
