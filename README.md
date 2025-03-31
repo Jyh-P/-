@@ -262,6 +262,9 @@ CREATE TABLE user_mood (
     
 );
 
+사용자가 문제를 풀면 solutions 테이블에 풀이 기록 저장되고 user_performance 테이블이 업데이트되면서 
+정답률과 평균 풀이시간을 조정한다 user_mood 테이블이 업데이트 되면서 감정 상태 조절을 한후 다음문제 
+추천시 user_mood와 user_performance 데이터를 참고하여 난이도를 조절한다
 
 전체 시스템 구조 정리 
 
@@ -274,5 +277,6 @@ DB → 데이터 저장
 AI 모델 → 문제 생성, 피드백 분석
 
 서버 → 전체 서비스 운영
+
 
 
