@@ -188,8 +188,8 @@ Endpoint: GET /api/mood-adjustment/{user_id}
   
 }
 
-2. DB 설계 (MySQL)
-3. 
+DB 설계 (MySQL)
+   
 problems 테이블 (문제 데이터 저장)
 
 CREATE TABLE problems (
