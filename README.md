@@ -106,8 +106,146 @@ AI 활용 방식 정리
 
 심리 분석: 감정 상태 기반 학습 방식 조정 (예: 쉬운 문제 추천)
 
-이 기능을 백엔드(스프링)에서 어떻게 API로 제공할지, DB에 어떻게 저장할지 정리하면 좋아.
+문제 생성 (AI + 기존 문제 병합)
 
+Endpoint: POST /api/problems/generate
+
+요청 데이터:
+
+json
+
+{
+
+  "topic": "algebra",
+  
+  "difficulty": "medium"
+  
+}
+
+응답 데이터:
+
+json
+
+{
+
+  "problem_id": 101,
+  
+  "question": "Solve for x: 3x + 5 = 20",
+  
+  "answer": "x = 5",
+  
+  "source": "AI"
+  
+}
+
+실시간 피드백 (풀이 과정 분석)
+
+Endpoint: POST /api/feedback
+
+요청 데이터:
+
+json
+
+{
+
+  "user_id": 1,
+  
+  "problem_id": 101,
+  
+  "user_answer": "x = 6"
+  
+}
+
+응답 데이터:
+
+json
+
+{
+
+  "is_correct": false,
+  
+  "hint": "다시 확인해보세요! 3x + 5 = 20을 푸는 첫 번째 단계는 5를 빼는 것입니다."
+  
+}
+
+난이도 조절 (정답률 & 풀이 시간 기반 추천)
+ 
+Endpoint: GET /api/recommendations/{user_id}
+
+응답 데이터:
+
+json
+
+{
+
+  "recommended_difficulty": "medium",
+  
+  "next_problems": [102, 103, 104]
+  
+}
+
+심리 분석 (감정 기반 학습 조정)
+
+Endpoint: GET /api/mood-adjustment/{user_id}
+
+응답 데이터:
+
+json
+
+{
+
+  "mood": "frustrated",
+  
+  "adjustment": "쉬운 문제를 추천합니다."
+  
+}
+
+2. DB 설계 (MySQL)
+3. 
+problems 테이블 (문제 데이터 저장)
+
+sql
+
+CREATE TABLE problems (
+    problem_id INT AUTO_INCREMENT PRIMARY KEY,
+    question TEXT NOT NULL,
+    answer VARCHAR(255) NOT NULL,
+    difficulty ENUM('easy', 'medium', 'hard') NOT NULL,
+    source ENUM('AI', 'public', 'manual') NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+solutions 테이블 (풀이 데이터 저장)
+sql
+CREATE TABLE solutions (
+    solution_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    problem_id INT NOT NULL,
+    user_answer VARCHAR(255) NOT NULL,
+    is_correct BOOLEAN NOT NULL,
+    time_taken INT NOT NULL,
+    solved_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (problem_id) REFERENCES problems(problem_id)
+);
+ user_performance 테이블 (정답률 & 풀이 시간 추적)
+sql
+
+CREATE TABLE user_performance (
+    user_id INT PRIMARY KEY,
+    correct_rate FLOAT NOT NULL,
+    avg_time_taken FLOAT NOT NULL,
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+user_mood 테이블 (감정 상태 저장)
+sql
+
+CREATE TABLE user_mood (
+    user_id INT PRIMARY KEY,
+    mood ENUM('neutral', 'frustrated', 'confident') NOT NULL,
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
 
 
 전체 시스템 구조 정리 
