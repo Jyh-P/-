@@ -18,6 +18,50 @@ AI 분석: AI가 제공한 피드백 저장
 ERD)
 ![image](https://github.com/user-attachments/assets/1444be64-002a-4271-9f02-6db537b9ca1f)
 
+https://dbdiagram.io/d
+
+Table users {
+    user_id INT [primary key]
+    username VARCHAR(50) [not null]
+    email VARCHAR(100) [not null, unique]
+    password VARCHAR(255) [not null]
+    role ENUM('student', 'teacher', 'parent') [not null]
+    created_at TIMESTAMP [default: "CURRENT_TIMESTAMP"]
+}
+
+Table problems {
+    problem_id INT [primary key]
+    question TEXT [not null]
+    answer VARCHAR(255) [not null]
+    difficulty ENUM('easy', 'medium', 'hard') [not null]
+    source ENUM('AI', 'public', 'manual') [not null]
+    created_at TIMESTAMP [default: "CURRENT_TIMESTAMP"]
+}
+
+Table solutions {
+    solution_id INT [primary key]
+    user_id INT [not null]
+    problem_id INT [not null]
+    user_answer VARCHAR(255) [not null]
+    is_correct BOOLEAN [not null]
+    time_taken INT [not null]
+    solved_at TIMESTAMP [default: "CURRENT_TIMESTAMP"]
+}
+
+Table achievements {
+    achievement_id INT [primary key]
+    user_id INT [not null]
+    correct_rate FLOAT [not null]
+    avg_time_taken FLOAT [not null]
+    repeated_mistakes TEXT
+    updated_at TIMESTAMP [default: "CURRENT_TIMESTAMP"]
+}
+
+Ref: solutions.user_id > users.user_id
+Ref: solutions.problem_id > problems.problem_id
+Ref: achievements.user_id > users.user_id
+
+
 
 AI 활용 방식 정리
 
