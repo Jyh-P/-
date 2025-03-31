@@ -15,6 +15,7 @@ DB 기본 설계 방향
 
 AI 분석: AI가 제공한 피드백 저장
 
+
 ERD)
 ![image](https://github.com/user-attachments/assets/1444be64-002a-4271-9f02-6db537b9ca1f)
 
@@ -91,6 +92,7 @@ Ref: solutions.user_id > users.user_id
 Ref: solutions.problem_id > problems.problem_id
 
 Ref: achievements.user_id > users.user_id
+
 
 
 
